@@ -1,25 +1,20 @@
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import cors from 'cors'; // Add this line
+import cors from 'cors';
 
 // Initialize dotenv
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000; // Changed to 5000 to avoid conflict with React
 
-app.use(cors()); // Add this line
+app.use(cors());
 app.use(express.json());
 
 // Basic health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Currency conversion API running on port ${PORT}`);
 });
 
 // Get exchange rates (you'll need a free API key from a service like ExchangeRate-API)
@@ -93,3 +88,8 @@ app.get('/api/convert', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Currency conversion API running on port ${PORT}`);
+}); 
