@@ -89,6 +89,37 @@ app.get('/api/convert', async (req, res) => {
   }
 });
 
+// Currency information
+const currencyInfo = {
+  USD: { name: "US Dollar", symbol: "$" },
+  EUR: { name: "Euro", symbol: "€" },
+  GBP: { name: "British Pound", symbol: "£" },
+  JPY: { name: "Japanese Yen", symbol: "¥" },
+  // Add more currencies as needed
+};
+
+// Get available currencies with additional info
+app.get('/api/currencies', async (req, res) => {
+  try {
+    const rates = await fetchExchangeRates('USD');
+    
+    // Create an array of currency objects with additional info
+    const currencies = Object.keys(rates).sort().map(code => ({
+      code,
+      name: currencyInfo[code]?.name || code,
+      symbol: currencyInfo[code]?.symbol || ''
+    }));
+    
+    res.json({
+      currencies,
+      count: currencies.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Currency conversion API running on port ${PORT}`);
