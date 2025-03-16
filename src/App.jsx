@@ -9,6 +9,7 @@ function App() {
   const [currencies, setCurrencies] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [amountUpdated, setAmountUpdated] = useState('')
 
   // Fetch available currencies when component mounts
   useEffect(() => {
@@ -56,8 +57,13 @@ function App() {
     }
   }
 
+  const handleAmountUpdated = (e) => {
+    setAmountUpdated(amount)
+  }
+
   // Find currency details by code
   const getCurrencyDetails = (code) => {
+    console.log(code);
     return currencies.find(currency => currency.code === code) || { code, name: code, symbol: '' }
   }
 
@@ -140,7 +146,10 @@ function App() {
       
       <div className="flex space-x-4 w-full">
         <button 
-          onClick={handleCalculate}
+          onClick={()=>{
+            handleCalculate()
+            handleAmountUpdated()
+          }}
           disabled={loading}
           className='bg-blue-500 text-white font-bold py-2 px-4 rounded flex-1 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50'
         >
@@ -159,10 +168,10 @@ function App() {
         <div className="mt-6 p-4 bg-green-100 rounded-lg border border-green-300 w-full">
           <div className="text-sm text-gray-600 text-center">Converted Amount</div>
           <div className="text-2xl font-bold text-gray-800 text-center">
-            {fromCurrencyDetails.symbol}{parseFloat(amount).toFixed(2)} {fromCurrency} = {toCurrencyDetails.symbol}{result.toFixed(2)} {toCurrency}
+            {fromCurrencyDetails.symbol}{parseFloat(amountUpdated).toFixed(2)} {fromCurrency} = {toCurrencyDetails.symbol}{result.toFixed(2)} {toCurrency}
           </div>
           <div className="text-xs text-gray-500 mt-2 text-center">
-            Exchange Rate: 1 {fromCurrency} = {(result / parseFloat(amount)).toFixed(4)} {toCurrency}
+            Exchange Rate: 1 {fromCurrency} = {(result / parseFloat(amountUpdated)).toFixed(4)} {toCurrency}
           </div>
           <div className="mt-4 text-sm">
             <div className="flex justify-between border-b border-green-200 pb-2 mb-2">
